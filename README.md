@@ -1,66 +1,21 @@
-## Foundry
+## Assignment 1
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+#Question 1
+-  Where are your structs, mappings, and arrays stored?
 
-Foundry consists of:
+**ANSWER**: Structs, mappings and arrays are state variables, so they are stored in the cotract storage. 
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
 
-## Documentation
+#Question 2
+-  How they behave when executed or called?
 
-https://book.getfoundry.sh/
+**ANSWER**: When you call a state variable, the contract reads the value from theblockchian state, modifies them, and write them back to the storage. Note that bothe reading and writing from storage sosts gas.
 
-## Usage
 
-### Build
+#Question 3
+-  Why don't you need to specify memory or storage with mappings?
 
-```shell
-$ forge build
-```
+**ANSWER**: Mappings are declared at contract level, which makes them state variables. So they are automatically live in storage. Also mapping cannot exist in memory, becasue memory is temporary and linear, but mapping require an unbouded key-based storage.
 
-### Test
 
-```shell
-$ forge test
-```
 
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
