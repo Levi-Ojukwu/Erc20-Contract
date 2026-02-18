@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
 interface IERC20 {
@@ -20,8 +20,7 @@ interface IERC20 {
 }
 
 contract ERC20 is IERC20 {
-
-    // Metadata
+    // Token matadadata
     string public name;
     string public symbol;
     uint8 public decimals;
@@ -108,5 +107,5 @@ contract ERC20 is IERC20 {
         return true;
     }
 
-    
+
 }
