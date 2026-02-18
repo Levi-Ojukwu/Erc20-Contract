@@ -8,24 +8,30 @@ interface IERC20 {
 
 contract SaveERC20AndEther {
 
+    // Storage
+
+    // Ether savings
     mapping(address => uint256) public etherBalances;
+
+    // ERC20 savings
     mapping(address => mapping(address => uint256)) public erc20Balances;
-    // user => token => balance
 
-    event Deposit(address indexed user, uint256 amount, string assetType, address token);
-    event Withdraw(address indexed user, uint256 amount, string assetType, address token);
+    // Events
 
-   /**
-    * 
-    * Ether functions 
-    */
+    event EtherDeposited(address indexed user, uint256 amount);
+    event EtherWithdrawn(address indexed user, uint256 amount);
+
+    event ERC20Deposited(address indexed user, address indexed token, uint256 amount);
+    event ERC20Withdrawn(address indexed user, address indexed token, uint256 amount);
+
+    // Ether Functions
 
     function depositEther() external payable {
         require(msg.value > 0, "Zero value");
 
         etherBalances[msg.sender] += msg.value;
 
-        emit Deposit(msg.sender, msg.value, "Ether", address(0));
+        emit EtherDeposited(msg.sender, msg.value);
     }
 
     function withdrawEther(uint256 amount) external {
@@ -36,22 +42,20 @@ contract SaveERC20AndEther {
         (bool success, ) = payable(msg.sender).call{value: amount}("");
         require(success, "Transfer failed");
 
-        emit Withdraw(msg.sender, amount, "Ether", address(0));
+        emit EtherWithdrawn(msg.sender, amount);
     }
 
-   /**
-    * 
-    * ERC20 functions 
-    */
-
+    //  ERC20 Functions
     function depositERC20(address token, uint256 amount) external {
         require(amount > 0, "Zero amount");
 
-        IERC20(token).transferFrom(msg.sender, address(this), amount);
+        // Pull tokens from user
+        bool success = IERC20(token).transferFrom(msg.sender, address(this), amount);
+        require(success, "Transfer failed");
 
         erc20Balances[msg.sender][token] += amount;
 
-        emit Deposit(msg.sender, amount, "ERC20", token);
+        emit ERC20Deposited(msg.sender, token, amount);
     }
 
     function withdrawERC20(address token, uint256 amount) external {
@@ -59,8 +63,22 @@ contract SaveERC20AndEther {
 
         erc20Balances[msg.sender][token] -= amount;
 
-        IERC20(token).transfer(msg.sender, amount);
+        bool success = IERC20(token).transfer(msg.sender, amount);
+        require(success, "Transfer failed");
 
-        emit Withdraw(msg.sender, amount, "ERC20", token);
+        emit ERC20Withdrawn(msg.sender, token, amount);
+    }
+
+// View Functions
+    function getContractEtherBalance() external view returns (uint256) {
+        return address(this).balance;
+    }
+
+    function getUserEtherBalance(address user) external view returns (uint256) {
+        return etherBalances[user];
+    }
+
+    function getUserERC20Balance(address user, address token) external view returns (uint256) {
+        return erc20Balances[user][token];
     }
 }
