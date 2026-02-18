@@ -15,7 +15,7 @@
 ## Question 3
 -  Why don't you need to specify memory or storage with mappings?
 
-**ANSWER**: Mappings are declared at contract level, which makes them state variables. So they are automatically live in storage. Also mapping cannot exist in memory, becasue memory is temporary and linear, but mapping require an unbouded key-based storage.
+**ANSWER**: Mappings are declared at contract level, which makes them state variables. So they are automatically live in storage. Also mapping cannot exist in memory, because memory is temporary and linear, but mapping require an unbouded key-based storage.
 
 
 

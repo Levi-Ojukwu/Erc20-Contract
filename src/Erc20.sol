@@ -19,6 +19,8 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
+
+
 contract ERC20 is IERC20 {
     // Token matadadata
     string public name;
@@ -41,10 +43,13 @@ contract ERC20 is IERC20 {
         symbol = _symbol;
         decimals = _decimals;
 
+        // Calculate the total supply based on the initial supply and decimals
         _totalSupply = _initialSupply * (10 ** uint256(decimals));
+
+        // Mint initial supply to the deployer
         _balances[msg.sender] = _totalSupply;
 
-        // Emit mint event
+        // Emit mint event (creating token out of nothing and minting to the deployer)
         emit Transfer(address(0), msg.sender, _totalSupply);
     }
 
@@ -59,7 +64,7 @@ contract ERC20 is IERC20 {
 
     function transfer(address recipient, uint256 amount) public override returns (bool) {
         
-        require(recipient != address(0), "Zero address deteceted");
+        require(recipient != address(0), "Zero address detected");
 
         require(_balances[msg.sender] >= amount, "Insufficient balance");
 
@@ -106,6 +111,4 @@ contract ERC20 is IERC20 {
 
         return true;
     }
-
-
 }
